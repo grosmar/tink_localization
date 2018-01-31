@@ -25,13 +25,20 @@ class LocalizationMacro
                             {
                                 case CString(s):
                                     var fieldName = field.name;
+                                    var m:Array<Expr> = [];
+
+                                    for ( arg in f.args )
+                                    {
+                                        //m.push( macro $v{fieldName} => $v{fieldName} );
+                                    }
+
                                     langMap.push(macro $v{fieldName} => $v{s});
                                     var f =
                                     {
                                         args: f.args,
                                         ret: f.ret,
                                         expr: macro {
-                                            return new haxe.Template( langMap[$v{fieldName}] ).execute({name:name});
+                                            return new thx.tpl.Template( langMap[$v{fieldName}] ).execute($a{m});
                                         }
                                     };
 
@@ -43,7 +50,7 @@ class LocalizationMacro
                             }
 
                         default:
-                            //TODO: maange block and return
+                            //TODO: maange block and return expr
                             throw "Only string body allowed";
                     }
 

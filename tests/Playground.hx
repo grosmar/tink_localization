@@ -21,7 +21,7 @@ class Playground
 class Lang extends Localization
 {
     public static function hello(name)
-        'Hello ::name::';
+        'Hello $name::';
 
     public static function world(name, age)
         'Happy ${name} day ${age}';
