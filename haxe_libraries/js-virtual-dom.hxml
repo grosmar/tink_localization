@@ -1,0 +1,5 @@
+# @install: lix --silent download "https://github.com/back2dos/js-virtual-dom/archive/e5565a54a42943ab408f0ab23421265a4b642470.tar.gz" into js-virtual-dom/0.9.3/github/e5565a54a42943ab408f0ab23421265a4b642470
+-D js-virtual-dom=0.9.3
+-cp ${HAXESHIM_LIBCACHE}/js-virtual-dom/0.9.3/github/e5565a54a42943ab408f0ab23421265a4b642470/src
+
+-lib tink_core
