@@ -1,4 +1,4 @@
--lib coconut.vdom
+#-lib coconut.vdom
 -lib tink_template
 -lib thx.tpl
 -lib thx.core
@@ -9,4 +9,5 @@
 -cp tests
 -main Playground
 -dce full
--js bin/index.js
+#-js bin/index.js
+-D dump=pretty
