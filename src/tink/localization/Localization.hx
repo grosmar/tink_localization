@@ -4,13 +4,13 @@ package tink.localization;
  * ...
  * @author duke
  */
-@:autoBuild(tink.localization.LocalizationMacro.fromBaseClass())
+@:autoBuild(tink.localization.LocalizationMacro.build())
 interface Localization
 {
     //var langMap:Map<String, thx.tpl.Template> = new Map();
     //var langMap:Map<String, Dynamic->String> = new Map();
 
-    //function set(key:String, value:String):Void;
+    function set(key:String, value:String):Void;
     /*{
         this.langMap.set(key, new thx.tpl.Template(value));
     }*/

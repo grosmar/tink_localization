@@ -9,5 +9,5 @@
 -cp tests
 -main Playground
 -dce full
-#-js bin/index.js
--D dump=pretty
+-js bin/index.js
+#-D dump=pretty

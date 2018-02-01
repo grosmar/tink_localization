@@ -11,10 +11,9 @@ class Playground
         var lang = Lang.inst;
 
         trace(lang.hello("francis"));
-        trace(lang.hello("doki"));
         trace(lang.world("apple",13));
 
-       // lang.set("hello", "hello cica ::name::");
+        lang.set("hello", "hello cica ${name}");
         trace(lang.hello("francis"));
 
         /*lang.simple()
@@ -33,7 +32,7 @@ class Lang implements Localization
     private function new () {}  // private constructor
 
     public function simple()
-        return 'Simplle';
+        return 'Simplleb';
 
     public function hello(name)
         'Hello $name';

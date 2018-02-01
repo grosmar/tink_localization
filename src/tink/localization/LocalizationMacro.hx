@@ -6,7 +6,7 @@ import haxe.macro.Expr.Field;
 class LocalizationMacro
 {
     macro static public
-    function fromBaseClass():Array<Field>
+    function build():Array<Field>
     {
         var langMapExpr:Array<Expr> = [];
 
@@ -18,13 +18,13 @@ class LocalizationMacro
             if ( field.name == "new" )
                 continue;
 
+
             switch (field.kind)
             {
                 case FFun(f):
                     switch(f.expr.expr)
                     {
                         case EConst(CString(s)) | EReturn({ expr : EConst(CString(s))}):
-                        //case EConst(CString(s)) | EReturn({ expr : EConst(CString(s))}):
                             var fieldName = field.name;
                             var argMapExpr:Array<Expr> = [];
 
@@ -34,9 +34,9 @@ class LocalizationMacro
                             }
 
                             if ( f.args.length == 0 )
-                                langMapExpr.push( macro $v{fieldName} => function(_) return $v{s} );
+                                langMapExpr.push( macro $v{fieldName} => {type: "smpl", tpl: function(_) return $v{s}} );
                             else
-                                langMapExpr.push( macro $v{fieldName} => new thx.tpl.Template( $v{s} ).execute );
+                                langMapExpr.push( macro $v{fieldName} => {type: "thx", tpl: new thx.tpl.Template( $v{s} ).execute} );
 
 
                             var f =
@@ -45,11 +45,11 @@ class LocalizationMacro
                                 ret: f.ret,
                                 expr: f.args.length == 0
                                     ? macro {
-                                        return langMap[$v{fieldName}](null);
+                                        return langMap[$v{fieldName}].tpl(null);
                                     }
                                     : macro {
                                         var argMap:Map<String,Dynamic> = $a{argMapExpr};
-                                        return langMap[$v{fieldName}](argMap);
+                                        return langMap[$v{fieldName}].tpl(argMap);
                                     }
                             };
 
@@ -57,8 +57,7 @@ class LocalizationMacro
                             field.access = [Access.APublic, Access.AInline];
 
                         case v:
-                            //TODO: manange block and return expr
-                            throw "Only string body allowed: " + field.name + "\n"+v;
+                            throw Context.error("Only string body allowed in function '" + field.name + "'", f.expr.pos ) ;
                     }
 
 
@@ -71,7 +70,7 @@ class LocalizationMacro
         {
             name:  "langMap",
             access: [Access.APrivate],
-            kind: FieldType.FVar(macro : Map<String, Dynamic->String>, macro $a{langMapExpr}),
+            kind: FieldType.FVar(macro : Map<String, {type:String, tpl:Dynamic->String}>, macro $a{langMapExpr}),
             pos: Context.currentPos(),
             meta: null,
             doc: null
@@ -79,19 +78,25 @@ class LocalizationMacro
 
         fields.push(mapField);
 
-        //this.langMap.set(key, new thx.tpl.Template(value));
-
         var f =
         {
-            args: [{name: "key",
-                    type: macro :String
-                    },
-                    {name: "value",
+            args: [{ name: "key",
                      type: macro :String
-                    }],
+                   },
+                   { name: "value",
+                     type: macro :String
+                   }],
             ret: macro :Void,
             expr: macro {
-                this.langMap.set(key, new thx.tpl.Template(value).execute);
+
+                switch( this.langMap.get(key).type )
+                {
+                    case "thx":  this.langMap.set(key, {type:"thx", tpl: new thx.tpl.Template(value).execute});
+                    case "smpl": this.langMap.set(key, {type:"smpl", tpl: function(_) return value });
+                    default:
+                        trace("Invalid field to set: ", key, value);
+                }
+
             }
         };
 
