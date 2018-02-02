@@ -5,14 +5,18 @@
     "localization",
     "locale",
     "translation",
-    "language"
+    "language",
+    "template"
   ],
   "classPath": "src",
+  "description": "Language localization library",
   "contributors": [
     "grosmar"
   ],
   "releasenote": "initial release",
   "version": "0.1.0",
   "url": "https://github.com/grosmar/tink_localization/",
-  "dependencies": {}
+  "dependencies": {
+    "thx.tpl": "0.2.1"
+  }
 }
