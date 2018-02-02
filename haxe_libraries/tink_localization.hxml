@@ -2,3 +2,6 @@
 -D tink_localization=0.1.0
 -cp ./src
 -D tink_localization
+-lib thx.tpl
+-lib thx.core
+-lib hscript
