@@ -1,6 +1,5 @@
 package ;
-import tink.cache.Cache;
-import Localization;
+import Playground.Lang;
 
 class RunTests {
 

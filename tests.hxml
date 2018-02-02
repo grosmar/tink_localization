@@ -1,12 +1,8 @@
--lib coconut.vdom
--lib tink_template
 -lib thx.tpl
 -lib thx.core
 -lib hscript
 
--dce no
 -cp src
 -cp tests
--main Playground
 -dce full
--js bin/index.js
+-main RunTests

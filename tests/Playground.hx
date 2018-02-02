@@ -6,23 +6,43 @@ class Playground
 
     static function main()
     {
-        //trace(Lang.langMap);
-        //haxe.Template.
-        trace(Lang.hello("francis"));
-        trace(Lang.hello("doki"));
-        trace(Lang.world("apple",13));
+        // The example is with singleton but you could use with any composition concept
+        var lang = Lang.inst;
 
-        Lang.langMap.set("hello", "hello cica ::name::");
-        trace(Lang.hello("francis"));
+        // Simple localization without param
+        trace(lang.simple());
+
+        // Simple template
+        trace(lang.hello("John"));
+        trace(lang.happyBirthday("Johnny",13));
+
+        // Overwite param at runtime, for example from loaded language file
+        lang.set("hello", "Hola ${name}");
+        trace(lang.hello("Paolo"));
+
+        // Complex template content (check Lang class)
+        trace(lang.credit(1));
+        trace(lang.credit(3));
     }
 }
 
 
-class Lang extends Localization
+class Lang implements Localization
 {
-    public static function hello(name)
-        'Hello $name::';
+    public static var inst(default, null) = new Lang();
+    private function new () {}  // private constructor
 
-    public static function world(name, age)
-        'Happy ${name} day ${age}';
+    public function simple()
+        return 'Simple template without param';
+
+    public function hello(name)
+        'Hello $name';
+
+    public function happyBirthday(name, age)
+        'Happy ${age}th birthday ${age}';
+
+    public function credit(amount)
+        '$if(amount <= 1) {credit}
+         else{credits}';
+
 }
