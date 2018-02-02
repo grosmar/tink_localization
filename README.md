@@ -8,9 +8,7 @@ Language localization library
 - Having default values compiled into the source if something is not localized in the given language
 - Being able to generate standard localization files from it
 
-tink_localization using thx.tpl templates for complex language elements with variables, and pure strings for elements without parameters
-
-- Simply  
+tink_localization using [thx.tpl templates](http://lib.haxe.org/p/thx.tpl) for complex language elements with variables, and pure strings for elements without parameters
 
 # Dependencies
 [thx.tpl](http://lib.haxe.org/p/thx.tpl)
