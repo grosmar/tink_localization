@@ -1,5 +1,4 @@
 #-lib coconut.vdom
--lib tink_template
 -lib thx.tpl
 -lib thx.core
 -lib hscript

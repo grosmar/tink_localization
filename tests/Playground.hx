@@ -6,22 +6,23 @@ class Playground
 
     static function main()
     {
-        //trace(Lang.langMap);
-        //haxe.Template.
+        // The example is with singleton but you could use with any composition concept
         var lang = Lang.inst;
 
-        trace(lang.hello("francis"));
-        trace(lang.world("apple",13));
+        // Simple localization without param
+        trace(lang.simple());
 
-        lang.set("hello", "hello cica ${name}");
-        trace(lang.hello("francis"));
+        // Simple template
+        trace(lang.hello("John"));
+        trace(lang.happyBirthday("Johnny",13));
 
-        /*lang.simple()
-        langMap["simple"]();
+        // Overwite param at runtime, for example from loaded language file
+        lang.set("hello", "Hola ${name}");
+        trace(lang.hello("Paolo"));
 
-        lang.hello("name")
-
-        langMap("hello")template.execute("name");*/
+        // Complex template content (check Lang class)
+        trace(lang.credit(1));
+        trace(lang.credit(3));
     }
 }
 
@@ -32,27 +33,16 @@ class Lang implements Localization
     private function new () {}  // private constructor
 
     public function simple()
-        return 'Simplleb';
+        return 'Simple template without param';
 
     public function hello(name)
         'Hello $name';
 
-    public function world(name, age)
-        'Happy ${name} day ${age}';
+    public function happyBirthday(name, age)
+        'Happy ${age}th birthday ${age}';
+
+    public function credit(amount)
+        '$if(amount <= 1) {credit}
+         else{credits}';
+
 }
-/*
-class Lang extends Localization
-{
-    public static var inst(default, null) = new Lang();
-    private function new () {}  // private constructor
-
-    var langMap:Map<String, thx.tpl.Template> = [
-        "hello" => new thx.tpl.Template("hello ${name}}")
-    ];
-
-    public function hello(name)
-        return langMap["hello"].execute(["name" => name]);
-
-    public function world(name, age)
-    'Happy ${name} day ${age}';
-}*/

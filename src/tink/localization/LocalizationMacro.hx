@@ -5,8 +5,7 @@ import haxe.macro.Expr.Field;
 
 class LocalizationMacro
 {
-    macro static public
-    function build():Array<Field>
+    macro static public function build():Array<Field>
     {
         var langMapExpr:Array<Expr> = [];
 
@@ -24,7 +23,8 @@ class LocalizationMacro
                 case FFun(f):
                     switch(f.expr.expr)
                     {
-                        case EConst(CString(s)) | EReturn({ expr : EConst(CString(s))}):
+                        case   EConst(CString(s))
+                             | EReturn({ expr : EConst(CString(s))}):
                             var fieldName = field.name;
                             var argMapExpr:Array<Expr> = [];
 
@@ -57,6 +57,7 @@ class LocalizationMacro
                             field.access = [Access.APublic, Access.AInline];
 
                         case v:
+                            trace( f.expr );
                             throw Context.error("Only string body allowed in function '" + field.name + "'", f.expr.pos ) ;
                     }
 
@@ -66,7 +67,14 @@ class LocalizationMacro
             }
         }
 
-        var mapField:Field =
+        fields.push(buildMapField(langMapExpr));
+        fields.push(buildSetField());
+
+        return fields;
+    }
+    static function buildMapField(langMapExpr)
+    {
+        return
         {
             name:  "langMap",
             access: [Access.APrivate],
@@ -76,16 +84,18 @@ class LocalizationMacro
             doc: null
         };
 
-        fields.push(mapField);
+    }
 
+    static function buildSetField()
+    {
         var f =
         {
             args: [{ name: "key",
-                     type: macro :String
-                   },
-                   { name: "value",
-                     type: macro :String
-                   }],
+                type: macro :String
+            },
+            { name: "value",
+                type: macro :String
+            }],
             ret: macro :Void,
             expr: macro {
 
@@ -94,13 +104,14 @@ class LocalizationMacro
                     case "thx":  this.langMap.set(key, {type:"thx", tpl: new thx.tpl.Template(value).execute});
                     case "smpl": this.langMap.set(key, {type:"smpl", tpl: function(_) return value });
                     default:
-                        trace("Invalid field to set: ", key, value);
+                    trace("Invalid field to set: ", key, value);
                 }
 
             }
         };
 
-        var setField:Field =
+
+        return
         {
             name:  "set",
             access: [Access.APublic],
@@ -110,8 +121,5 @@ class LocalizationMacro
             doc: null
         };
 
-        fields.push(setField);
-
-        return fields;
     }
 }

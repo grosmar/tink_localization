@@ -12,7 +12,7 @@
     "grosmar"
   ],
   "releasenote": "initial release",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "url": "https://github.com/grosmar/tink_localization/",
   "dependencies": {}
 }
