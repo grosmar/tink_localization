@@ -1,6 +1,6 @@
 -cp src
 -cp tests
 -dce full
-#-main RunTests
--main Playground
--js bin/index.js
+-main RunTests
+#-main Playground
+#-js bin/index.js
