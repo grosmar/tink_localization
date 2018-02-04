@@ -1,4 +1,0 @@
-# @install: lix --silent download "haxelib:thx.tpl#0.2.1" into thx.tpl/0.2.1/haxelib
--D thx.tpl=0.2.1
--cp ${HAXESHIM_LIBCACHE}/thx.tpl/0.2.1/haxelib/src
--D thx_tpl

@@ -11,12 +11,11 @@ Language localization library
 
 tink_localization using [thx.tpl templates](http://lib.haxe.org/p/thx.tpl) for complex language elements with variables, and pure strings for elements without parameters
 
-# Dependencies
-[thx.tpl](http://lib.haxe.org/p/thx.tpl)
 
 # Usage
 Check [tests/Playground.hx](https://github.com/grosmar/tink_localization/blob/master/tests/Playground.hx)
 
 # Todo
+- Possibility to validate at compile time template strings
 - Possibility to generate standard localization files from class at compile time (ie .po or .json files)
-- Add support for other templating systems (ie haxe.Template, handlebars, etc)
+- Add support for other templating systems (ie tink_template, thx.tpl, handlebars, etc)

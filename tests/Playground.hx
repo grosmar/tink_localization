@@ -7,6 +7,7 @@ class Playground
     static function main()
     {
         // The example is with singleton but you could use with any composition concept
+        Lang.inst = new Lang();
         var lang = Lang.inst;
 
         // Simple localization without param
@@ -17,7 +18,7 @@ class Playground
         trace(lang.happyBirthday("Johnny",13));
 
         // Overwite param at runtime, for example from loaded language file
-        lang.set("hello", "Hola ${name}");
+        lang.set("hello", "Hola ::name::");
         trace(lang.hello("Paolo"));
 
         // Complex template content (check Lang class)
@@ -29,20 +30,19 @@ class Playground
 
 class Lang implements Localization
 {
-    public static var inst(default, null) = new Lang();
-    private function new () {}  // private constructor
+    public static var inst;
+    public function new () {}  // private constructor
 
     public function simple()
         return 'Simple template without param';
 
     public function hello(name)
-        'Hello $name';
+        'Hello ::name::';
 
     public function happyBirthday(name, age)
-        'Happy ${age}th birthday ${age}';
+        'Happy ::age::th birthday ::name::';
 
     public function credit(amount)
-        '$if(amount <= 1) {credit}
-         else{credits}';
+        '::if (amount <= 1):: credit ::else:: credits ::end::';
 
 }

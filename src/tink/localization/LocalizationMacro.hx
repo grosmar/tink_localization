@@ -26,18 +26,22 @@ class LocalizationMacro
                         case   EConst(CString(s))
                              | EReturn({ expr : EConst(CString(s))}):
                             var fieldName = field.name;
-                            var argMapExpr:Array<Expr> = [];
+                            //var argMapExpr:Array<Expr> = [];
+                            var argMapExpr:Array<{field:String, expr:Expr}> = [];
 
                             for ( arg in f.args )
                             {
-                                argMapExpr.push( macro $v{arg.name} => $i{arg.name} );
+                                //argMapExpr.push( macro $v{arg.name} => $i{arg.name} );
+                                argMapExpr.push( {field: arg.name,  expr: macro $i{arg.name}} );
                             }
 
                             if ( f.args.length == 0 )
-                                langMapExpr.push( macro $v{fieldName} => {type: "smpl", tpl: function(_) return $v{s}} );
+                                langMapExpr.push( macro $v{fieldName} => {type: "smpl", tpl: $v{s}} );
                             else
-                                langMapExpr.push( macro $v{fieldName} => {type: "thx", tpl: new thx.tpl.Template( $v{s} ).execute} );
+                                langMapExpr.push( macro $v{fieldName} => {type: "tpl", tpl: new haxe.Template( $v{s} ).execute} );
 
+
+                            var argObj = {expr:EObjectDecl(argMapExpr), pos: f.expr.pos};
 
                             var f =
                             {
@@ -45,11 +49,11 @@ class LocalizationMacro
                                 ret: f.ret,
                                 expr: f.args.length == 0
                                     ? macro {
-                                        return langMap[$v{fieldName}].tpl(null);
+                                        return langMap[$v{fieldName}];
                                     }
                                     : macro {
-                                        var argMap:Map<String,Dynamic> = $a{argMapExpr};
-                                        return langMap[$v{fieldName}].tpl(argMap);
+                                        //var argMap:Map<String,Dynamic> = $a{argMapExpr};
+                                        return langMap[$v{fieldName}].tpl($argObj);
                                     }
                             };
 
@@ -78,7 +82,7 @@ class LocalizationMacro
         {
             name:  "langMap",
             access: [Access.APrivate],
-            kind: FieldType.FVar(macro : Map<String, {type:String, tpl:Dynamic->String}>, macro $a{langMapExpr}),
+            kind: FieldType.FVar(macro : Map<String, {type:String, tpl:Dynamic}>, macro $a{langMapExpr}),
             pos: Context.currentPos(),
             meta: null,
             doc: null
@@ -101,8 +105,8 @@ class LocalizationMacro
 
                 switch( this.langMap.get(key).type )
                 {
-                    case "thx":  this.langMap.set(key, {type:"thx", tpl: new thx.tpl.Template(value).execute});
-                    case "smpl": this.langMap.set(key, {type:"smpl", tpl: function(_) return value });
+                    case "tpl":  this.langMap.set(key, {type:"tpl", tpl: new haxe.Template(value).execute});
+                    case "smpl": this.langMap.set(key, {type:"smpl", tpl: value });
                     default:
                     trace("Invalid field to set: ", key, value);
                 }

@@ -1,8 +1,6 @@
--lib thx.tpl
--lib thx.core
--lib hscript
-
 -cp src
 -cp tests
 -dce full
--main RunTests
+#-main RunTests
+-main Playground
+-js bin/index.js
